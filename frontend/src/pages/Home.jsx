@@ -58,7 +58,15 @@ const Home = () => {
             variants={staggerContainer}
         >
             {/* Hero Section */}
-            <section className="relative bg-secondary text-white overflow-hidden rounded-b-[3rem] md:rounded-b-[4rem] shadow-2xl">
+            <section
+                className="relative bg-secondary text-white overflow-hidden rounded-b-[3rem] md:rounded-b-[4rem] shadow-2xl"
+                style={{
+                    backgroundImage: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1920&auto=format&fit=crop')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            >
                 <div className="absolute top-0 right-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
                 <div className="container mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center relative z-10">

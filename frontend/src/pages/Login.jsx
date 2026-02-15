@@ -39,10 +39,12 @@ const Login = () => {
         >
             {/* Left Side - High Quality Indian Food Image */}
             <div className="hidden lg:block w-1/2 relative overflow-hidden">
-                <div
-                    className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1543353071-87d3df1e6508?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center transition-transform hover:scale-105 duration-[20s]"
-                    aria-label="Delicious Indian Food"
-                ></div>
+                <img
+                    src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=1200&auto=format&fit=crop&q=80"
+                    alt="Delicious Indian Food"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform hover:scale-105 duration-[20s]"
+                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&auto=format&fit=crop&q=80'; }}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 p-12 text-white">
                     <motion.h1

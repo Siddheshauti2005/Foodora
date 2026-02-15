@@ -39,7 +39,12 @@ const Signup = () => {
         >
             {/* Left Side - Image/Brand */}
             <div className="hidden md:flex w-1/2 bg-secondary text-white items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+                <img
+                    src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&auto=format&fit=crop&q=80"
+                    alt="Join Foodora"
+                    className="absolute inset-0 w-full h-full object-cover opacity-40 bg-center"
+                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&auto=format&fit=crop&q=80'; }}
+                />
                 <div className="relative z-10 text-center p-12">
                     <motion.h1
                         className="text-6xl font-heading font-bold mb-4 tracking-tight"
