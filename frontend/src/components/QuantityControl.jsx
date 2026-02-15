@@ -23,7 +23,7 @@ const QuantityControl = ({ item, restaurant }) => {
         return (
             <button
                 onClick={handleAdd}
-                className="bg-white text-green-600 font-bold py-2 px-6 rounded-md shadow-sm border border-gray-200 hover:shadow-md transition-all uppercase text-sm"
+                className="bg-white text-primary font-bold py-2 px-6 rounded-md shadow-sm border border-gray-100 hover:shadow-md transition-all uppercase text-sm hover:bg-gray-50"
             >
                 Add
             </button>
@@ -31,18 +31,18 @@ const QuantityControl = ({ item, restaurant }) => {
     }
 
     return (
-        <div className="flex items-center bg-green-50 rounded-md border border-green-200 overflow-hidden shadow-sm">
+        <div className="flex items-center bg-white rounded-md border border-gray-200 overflow-hidden shadow-sm">
             <button
                 onClick={handleRemove}
-                className="p-2 text-green-700 hover:bg-green-100 transition-colors"
+                className="p-2 text-primary hover:bg-gray-50 transition-colors"
                 aria-label="Decrease quantity"
             >
                 <Minus size={14} strokeWidth={3} />
             </button>
-            <span className="font-bold text-green-700 w-6 text-center text-sm">{quantity}</span>
+            <span className="font-bold text-primary w-6 text-center text-sm">{quantity}</span>
             <button
                 onClick={handleAdd}
-                className="p-2 text-green-700 hover:bg-green-100 transition-colors"
+                className="p-2 text-primary hover:bg-gray-50 transition-colors"
                 aria-label="Increase quantity"
             >
                 <Plus size={14} strokeWidth={3} />

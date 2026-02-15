@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import { fadeInUp, pageTransition } from '../utils/animations';
 
 const Signup = () => {
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -28,74 +30,108 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen flex">
-            {/* Left Side - Image */}
-            <div className="hidden md:flex w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')" }}>
-                <div className="w-full h-full bg-black/40 flex items-center justify-center">
-                    <h1 className="text-white text-5xl font-bold">Join Foodora</h1>
+        <motion.div
+            className="min-h-screen flex bg-accent"
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            variants={pageTransition}
+        >
+            {/* Left Side - Image/Brand */}
+            <div className="hidden md:flex w-1/2 bg-secondary text-white items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+                <div className="relative z-10 text-center p-12">
+                    <motion.h1
+                        className="text-6xl font-heading font-bold mb-4 tracking-tight"
+                        variants={fadeInUp}
+                    >
+                        Join Foodora
+                    </motion.h1>
+                    <motion.p
+                        className="text-xl text-gray-300 max-w-md mx-auto"
+                        variants={fadeInUp}
+                    >
+                        Your favorite restaurants, delivered with care. Start your culinary journey today.
+                    </motion.p>
                 </div>
             </div>
 
             {/* Right Side - Form */}
-            <div className="w-full md:w-1/2 flex items-center justify-center bg-white p-8">
-                <div className="w-full max-w-md">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
-                    <p className="text-gray-500 mb-8">Sign up to start ordering tasty food</p>
+            <div className="w-full md:w-1/2 flex items-center justify-center p-8">
+                <motion.div
+                    className="w-full max-w-md bg-white p-10 rounded-2xl shadow-xl"
+                    variants={fadeInUp}
+                >
+                    <div className="text-center mb-10">
+                        <h2 className="text-3xl font-heading font-bold text-secondary mb-2">Create Account</h2>
+                        <p className="text-text-muted">Sign up to get started</p>
+                    </div>
 
-                    {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded mb-6 text-sm"
+                        >
+                            {error}
+                        </motion.div>
+                    )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-5">
                         <div>
-                            <label className="block text-gray-700 font-medium mb-2">Full Name</label>
+                            <label className="block text-sm font-semibold text-secondary mb-2">Full Name</label>
                             <input
                                 type="text"
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fc8019]"
+                                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                                placeholder="John Doe"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 font-medium mb-2">Email</label>
+                            <label className="block text-sm font-semibold text-secondary mb-2">Email Address</label>
                             <input
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fc8019]"
+                                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                                placeholder="name@example.com"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-gray-700 font-medium mb-2">Password</label>
+                            <label className="block text-sm font-semibold text-secondary mb-2">Password</label>
                             <input
                                 type="password"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fc8019]"
+                                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                                placeholder="••••••••"
                                 required
                             />
                         </div>
 
                         <button
                             type="submit"
-                            className="w-full bg-[#fc8019] text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition-colors"
+                            className="w-full bg-primary text-white py-3.5 rounded-lg font-bold hover:bg-opacity-90 transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/30"
                         >
-                            Sign Up
+                            Create Account
                         </button>
                     </form>
 
-                    <p className="mt-6 text-center text-gray-600">
+                    <p className="mt-8 text-center text-text-muted">
                         Already have an account?{' '}
-                        <Link to="/login" className="text-[#fc8019] font-bold hover:underline">
-                            Log in
+                        <Link to="/login" className="text-primary font-bold hover:underline">
+                            Sign in
                         </Link>
                     </p>
-                </div>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { Search, Percent, User, LogOut, ChevronDown, ShoppingBag, HelpCircle } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Search, ShoppingBag, User, LogOut, ChevronDown, UtensilsCrossed } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useLocation as useGeoLocation } from '../context/LocationContext';
+import { useLocation } from '../context/LocationContext';
+import { useCart } from '../context/CartContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
     const { user, logout } = useAuth();
-    const { location } = useGeoLocation();
+    const { location } = useLocation();
     const navigate = useNavigate();
-    const routerLocation = useLocation();
+    const { toggleCart, cartItems } = useCart();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    // Mock cart count - replace with actual cart context later
-    const cartCount = user ? 2 : 0;
+    // Calculate total quantity across all items
+    const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
     const handleLogout = () => {
         logout();
@@ -20,96 +22,106 @@ const Navbar = () => {
         setDropdownOpen(false);
     };
 
-    const NavItem = ({ icon: Icon, text, to, onClick, badge }) => {
-        const Content = (
-            <div className={`flex items-center gap-3 cursor-pointer group hover:text-[#fc8019] transition-colors duration-300 ${to ? '' : 'h-full'}`}>
-                <div className="relative">
-                    <Icon size={20} strokeWidth={2} />
-                    {badge > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-[#ffa700] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center border-2 border-white">
-                            {badge}
-                        </span>
-                    )}
-                </div>
-                <span className="font-medium text-[#3d4152] group-hover:text-[#fc8019] text-base">
-                    {text}
-                </span>
-            </div>
-        );
-
-        if (to) {
-            return <Link to={to}>{Content}</Link>;
-        }
-        return <div onClick={onClick}>{Content}</div>;
-    };
-
     return (
-        <div className="sticky top-0 z-50 bg-white shadow-lg h-20">
-            <div className="max-w-[1200px] mx-auto h-full flex justify-between items-center px-4">
-                {/* Left Side: Logo & Location */}
-                {/* Left Side: Logo */}
-                <div className="flex items-center gap-10">
-                    <Link to="/" className="flex items-center gap-2 group">
-                        {/* Swiggy-like logo style */}
-                        <svg className="w-8 h-10 fill-current text-[#fc8019] group-hover:scale-110 transition-transform duration-200" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <span className="text-2xl font-bold text-[#3d4152] tracking-tighter group-hover:text-[#fc8019] transition-colors">
-                            Foodora
-                        </span>
-                    </Link>
+        <motion.nav
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            className="hidden md:block sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100"
+        >
+            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                {/* Logo Section */}
+                <Link to="/" className="flex items-center gap-2 group">
+                    <div className="bg-primary/10 p-2 rounded-xl group-hover:bg-primary/20 transition-colors">
+                        <UtensilsCrossed className="text-primary" size={24} />
+                    </div>
+                    <span className="text-2xl font-heading font-bold text-secondary tracking-tight">
+                        Foodora
+                    </span>
+                </Link>
+
+                {/* Center Navigation */}
+                <div className="flex items-center gap-8">
+                    <Link to="/" className="text-secondary font-medium hover:text-primary transition-colors">Home</Link>
+                    <Link to="/menu" className="text-secondary font-medium hover:text-primary transition-colors">Menu</Link>
+                    <Link to="/about" className="text-text-muted hover:text-primary transition-colors">About</Link>
                 </div>
 
-                {/* Right Side: Navigation */}
-                <div className="flex items-center gap-10">
-                    <ul className="hidden md:flex items-center gap-12">
-                        <li>
-                            <NavItem icon={Search} text="Search" />
-                        </li>
-                        <li>
-                            <NavItem icon={Percent} text="Offers" />
-                        </li>
-                        <li>
-                            <NavItem icon={HelpCircle} text="Help" />
-                        </li>
-                        <li>
-                            {user ? (
-                                <div className="relative">
-                                    <div
-                                        className="flex items-center gap-3 cursor-pointer group hover:text-[#fc8019] transition-colors duration-300"
-                                        onClick={() => setDropdownOpen(!dropdownOpen)}
-                                    >
-                                        <User size={20} strokeWidth={2} />
-                                        <span className="font-medium text-[#3d4152] group-hover:text-[#fc8019] text-base">
-                                            {user.name || 'Account'}
-                                        </span>
-                                    </div>
+                {/* Right Side Actions */}
+                <div className="flex items-center gap-6">
+                    <button className="text-secondary hover:text-primary transition-colors">
+                        <Search size={20} />
+                    </button>
 
-                                    {dropdownOpen && (
-                                        <div className="absolute top-10 right-0 w-48 bg-white rounded-md shadow-xl py-2 z-50 border border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
-                                            <button
-                                                onClick={handleLogout}
-                                                className="flex w-full items-center px-4 py-3 text-sm text-[#3d4152] hover:bg-gray-50 hover:text-[#fc8019] transition-colors"
-                                            >
-                                                <LogOut size={16} className="mr-3" />
-                                                Sign out
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <NavItem icon={User} text="Sign In" to="/login" />
+                    <div className="relative group cursor-pointer" onClick={toggleCart}>
+                        <ShoppingBag size={20} className="text-secondary group-hover:text-primary transition-colors" />
+                        {totalItems > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-primary text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full shadow-sm animate-bounce-short">
+                                {totalItems}
+                            </span>
+                        )}
+                    </div>
+
+                    <div className="relative">
+                        <button
+                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                            className="flex items-center gap-2 hover:bg-gray-50 px-3 py-2 rounded-full transition-all border border-transparent hover:border-gray-100"
+                        >
+                            <div className="w-8 h-8 bg-gradient-to-tr from-primary to-emerald-300 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                                {user?.name ? user.name[0].toUpperCase() : <User size={14} />}
+                            </div>
+                            <div className="flex flex-col items-start leading-tight">
+                                <span className="font-medium text-sm text-secondary">
+                                    {user?.name ? `Hi, ${user.name.split(' ')[0]}` : 'Account'}
+                                </span>
+                                {location && (
+                                    <span className="text-[10px] text-primary font-bold truncate max-w-[80px]">
+                                        {location.split(',')[0]}
+                                    </span>
+                                )}
+                            </div>
+                            <ChevronDown size={14} className={`text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        <AnimatePresence>
+                            {dropdownOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    className="absolute top-12 right-0 w-48 bg-white rounded-xl shadow-xl py-2 border border-gray-100 overflow-hidden"
+                                >
+                                    <div className="px-4 py-2 border-b border-gray-50">
+                                        <p className="text-xs text-gray-400 font-medium">Signed in as</p>
+                                        <p className="text-sm font-bold text-secondary truncate">{user?.email}</p>
+                                    </div>
+                                    <Link
+                                        to="/profile"
+                                        className="block px-4 py-2 text-sm text-secondary hover:bg-gray-50 hover:text-primary"
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Profile Settings
+                                    </Link>
+                                    <Link
+                                        to="/orders"
+                                        className="block px-4 py-2 text-sm text-secondary hover:bg-gray-50 hover:text-primary"
+                                        onClick={() => setDropdownOpen(false)}
+                                    >
+                                        Your Orders
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 flex items-center gap-2 mt-1"
+                                    >
+                                        <LogOut size={14} />
+                                        Sign Out
+                                    </button>
+                                </motion.div>
                             )}
-                        </li>
-                        <li>
-                            <NavItem icon={ShoppingBag} text="Cart" badge={cartCount} />
-                        </li>
-                    </ul>
+                        </AnimatePresence>
+                    </div>
                 </div>
             </div>
-        </div>
+        </motion.nav>
     );
 };
 
