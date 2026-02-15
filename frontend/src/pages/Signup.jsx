@@ -19,7 +19,7 @@ const Signup = () => {
         e.preventDefault();
         setError('');
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/register', formData);
+            const response = await axios.post('https://foodora-backend.onrender.com/api/auth/register', formData);
             if (response.data.success) {
                 login(response.data.token, response.data.user);
                 navigate('/');
